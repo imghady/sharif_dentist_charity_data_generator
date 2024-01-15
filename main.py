@@ -21,15 +21,14 @@ clinics = pd.read_csv("us-500.csv", usecols=['company_name'])
 specialities = ['general', 'Endodontist', 'Orthodontist', 'Periodontist', 'Prosthodontist', 'Oral Medicine']
 
 # define tables dataframes
-dentist = pd.DataFrame(columns=['dentist_id', 'name', 'speciality', 'capacity_in_month', 'location_id', 'clinic_name'])
+dentist = pd.DataFrame(columns=['dentist_id', 'name', 'contact_number', 'speciality', 'capacity_in_month', 'location_id', 'clinic_name'])
 patient = pd.DataFrame(columns=['patient_id', 'name', 'age', 'contact_number', 'location_id'])
 
 # generate dentist table
-offset = 10000
+offset1 = 10000
 for i in range(1, 101):
-    dentist_id = str(offset + i)
+    dentist_id = str(offset1 + i)
     contact_number = "09" + str(random_with_n_digits(9))
-    age = random.randint(4, 14)
     first_name = names1['first_name'].loc[names1.index[random.randint(0, len(names1) - 1)]]
     last_name = names1['last_name'].loc[names1.index[random.randint(0, len(names1) - 1)]]
     name = first_name + " " + last_name
@@ -38,11 +37,29 @@ for i in range(1, 101):
     location_id = location['Location_id'].loc[location.index[random.randint(0, len(location) - 1)]]
     clinic_name = clinics['company_name'].loc[clinics.index[random.randint(0, len(clinics) - 1)]]
     temp_df = pd.DataFrame(
-        [{'dentist_id': dentist_id, 'name': name, 'speciality': dentist, 'capacity_in_month': capacity,
+        [{'dentist_id': dentist_id, 'name': name, 'contact_number': contact_number, 'speciality': dentist, 'capacity_in_month': capacity,
           'location_id': location_id, 'clinic_name': clinic_name}])
     dentist = pd.concat([dentist, temp_df], ignore_index=True)
 
 print(dentist.head())
+
+# generate patient table
+offset2 = 100000
+for i in range(1, 1001):
+    patient_id = str(offset2 + i)
+    contact_number = "09" + str(random_with_n_digits(9))
+    age = random.randint(4, 14)
+    first_name = names1['first_name'].loc[names1.index[random.randint(0, len(names1) - 1)]]
+    last_name = names1['last_name'].loc[names1.index[random.randint(0, len(names1) - 1)]]
+    name = first_name + " " + last_name
+    location_id = location['Location_id'].loc[location.index[random.randint(0, len(location) - 1)]]
+    clinic_name = clinics['company_name'].loc[clinics.index[random.randint(0, len(clinics) - 1)]]
+    temp_df = pd.DataFrame(
+        [{'patient_id': patient_id, 'name': name, 'age': age, 'contact_number': contact_number,
+          'location_id': location_id}])
+    patient = pd.concat([patient, temp_df], ignore_index=True)
+
+print(patient.head())
 
 # generate final file
 # with pd.ExcelWriter('output.xlsx') as writer:
